@@ -1,6 +1,6 @@
 <template>
     <v-app>
-      <v-content>
+      <v-main>
         <v-container class="deep-purple lighten-4" fluid fill-height>
           <v-row  justify="center">
             <v-col  justify="center" cols="12" sm="8" md="4">
@@ -9,13 +9,13 @@
                 <v-card-text>
                   <v-form @submit.prevent="login">
                     <v-text-field
-                      v-model="username"
+                      v-model="inputData.regiNo"
                       label="Registration No"
                       outlined
                       required
                     ></v-text-field>
                     <v-text-field
-                      v-model="password"
+                      v-model="inputData.password"
                       label="Password"
                       outlined
                       type="password"
@@ -30,7 +30,7 @@
             </v-col>
           </v-row>
         </v-container>
-      </v-content>
+      </v-main>
     </v-app>
   </template>
   
@@ -38,21 +38,11 @@
   export default {
     data() {
       return {
-        username: '',
-        password: '',
+        inputData:{},
       };
     },
     methods: {
-      login() {
-        // Perform login logic here, e.g., send login request to server
-        // You can access the entered username and password using this.username and this.password
-        console.log('Username:', this.username);
-        console.log('Password:', this.password);
-        
-        // Clear the form fields after login
-        this.username = '';
-        this.password = '';
-      },
+
     },
   };
   </script>
