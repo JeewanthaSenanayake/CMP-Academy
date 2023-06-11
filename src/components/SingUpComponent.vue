@@ -28,7 +28,7 @@
                     <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn class="mb-3 mr-2 orange white--text" width="100" style="text-transform: none;"
-                        @click="e6 = 2">
+                        @click="e6 = 2; getAlYears();">
                         Continue
                       </v-btn>
                     </v-card-actions>
@@ -67,31 +67,36 @@
             </v-card>
           </v-col>
         </v-row>
-        {{ inputData }}
       </v-container>
     </v-content>
   </v-app>
 </template>
   
 <script>
+import ApiService from '@/services/ApiService';
 export default {
   data() {
     return {
       e6: 1,
       inputData: {},
-      date: null,
-      items: ['2023 A/L','2024 A/L','2025 A/L']
+      items: []
     };
   },
   methods: {
+    async getAlYears() {
+      try {
+        // this.loading = true;
+        let data = await ApiService.get('/cmp/api/v1/alyears/getAlYears');
+        this.items = data.years
+        // this.loading = false;
 
-  },
-  watch: {
-    date(val) {
-      if (val) {
-        this.$refs.picker.internalActivePicker = 'YEAR'
+      } catch (error) {
+        // Handle error
       }
     }
+  },
+  mounted() {
+    this.getAlYears()
   }
 };
 </script>
