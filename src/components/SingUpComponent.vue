@@ -47,17 +47,16 @@
                 <v-stepper-content step="2">
                   <v-card color="white">
                     <v-card-text>
+                      <div class="blue white--text mb-4 py-2">
+                        <h3 v-if="popupVal">Registration Number : <b>{{ regiNumber }}</b></h3>
+                        <h4 v-if="!popupVal">Registration Number : {{ regiNumber }}</h4>
+                        <small>Please remember your registration number</small>
+                      </div>
                       <v-form ref="form2" v-model="valid2">
-                        <div class="blue white--text mb-4 py-2">
-                          <h3 v-if="popupVal">Registration Number : <b>{{ regiNumber }}</b></h3>
-                          <h4 v-if="!popupVal">Registration Number : {{ regiNumber }}</h4>
-                          <small>Please remember your registration number</small>
-                        </div>
-                        
-                        <v-text-field  v-model="inputData.password" label="Password" :rules="passwordRules" outlined
+                        <v-text-field v-model="pass" label="Password" :rules="passwordRules" outlined type="password"
+                          required></v-text-field>
+                        <v-text-field v-model="cpass" label="Confirm Password" :rules="cpasswordRules" outlined
                           type="password" required></v-text-field>
-                        <v-text-field v-model="inputData.cpassword" label="Confirm Password" :rules="cpasswordRules"
-                          outlined type="password" required></v-text-field>
                       </v-form>
 
                     </v-card-text>
@@ -65,14 +64,18 @@
                       <v-spacer></v-spacer>
 
                       <v-btn class="mb-3 mr-2 orange white--text" width="100" style="text-transform: none;"
-                        @click="e6 = 1">
+                        @click="e6 = 1" :disabled="loading">
                         Back
                       </v-btn>
-                     
+
                       <v-btn class="mb-3 ml-2 blue white--text" width="100" style="text-transform: none;"
-                        @click="submit();">
+                        @click="loader = 'loading'; submit();" :loading="loading" :disabled="loading">
                         Submit
+                        <template v-slot:loader>
+                          <span>Loading...</span>
+                        </template>
                       </v-btn>
+
                     </v-card-actions>
                   </v-card>
                 </v-stepper-content>
@@ -86,15 +89,21 @@
 </template>
   
 <script>
-import ApiService from '@/services/ApiService';
+import axios from '@/services/axiosConfig';
+import firebase from '@/services/firebase';
+import router from '@/router/index'
+
 export default {
   data() {
     return {
-      popupVal:true,
+      loading: false,
+      pass: '',
+      cpass: '',
+      popupVal: true,
       e6: 1,
       inputData: {},
       items: [],
-      regiNumber: "null",
+      regiNumber: null,
       valid: true,
       valid2: true,
       nameRules: [v => !!v || 'Field is required',
@@ -105,41 +114,84 @@ export default {
       whatsappRules: [v => !!v || "Field is required", v => (/^\+94\d{9}$/.test(v) || /^\d{10}$/.test(v)) || 'Invalid WhatsApp Number for Sri Lanka'],
       emailRules: [v => !!v || "Field is required", v => /.+@.+\..+/.test(v) || 'E-mail must be valid'],
       passwordRules: [v => !!v || "Field is required",
-      v => v.length > 5 || "Password length must be longer than 5 characters"],
-      cpasswordRules: [v => !!v || "Field is required", v => (v == this.inputData.password) || 'Password not match']
+      v => (v && v.length > 5) || "Password length must be longer than 5 characters"],
+      cpasswordRules: [v => !!v || "Field is required", v => (v == this.pass) || 'Password not match']
     };
   },
   methods: {
     async ContinueFirstStep() {
       if (this.$refs.form1.validate()) {
-        try {
-          let alYear = this.inputData.yerOfAl[0]+this.inputData.yerOfAl[1]+this.inputData.yerOfAl[2]+this.inputData.yerOfAl[3]
-          // this.loading = true;
-          let data = await ApiService.get('/cmp/api/v1/registration/getRegiNum', 'year', alYear);
-          this.regiNumber = data
-          // this.loading = false;
 
-        } catch (error) {
-          // Handle error
-        }
+        let alYear = this.inputData.yerOfAl[0] + this.inputData.yerOfAl[1] + this.inputData.yerOfAl[2] + this.inputData.yerOfAl[3]
+        await axios.get(`/cmp/api/v1/registration/getRegiNum?year=${alYear}`)
+          .then(response => {
+            this.regiNumber = response.data.message
+            this.inputData.regiNo = response.data.message
+
+          }).catch(error => {
+            console.error(error);
+
+          });
         this.e6 = 2
       }
     },
-    submit() {
+    async submit() {
       if (this.$refs.form2.validate()) {
-        console.log("hg")
+        if (this.regiNumber != null) {
+          let email = this.regiNumber + '@gmail.com'
+          let password = this.cpass
+          this.inputData.role = 'student'
+
+
+          //   firebase.auth().signInWithEmailAndPassword(email, password)
+          // .then((userCredential) => {
+          //   // User logged in successfully
+          //   console.log(userCredential.user.uid);
+          // })
+          // .catch((error) => {
+          //   // Handle login error
+          //   console.error(error);
+          // });
+          this.loading = true
+          await firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+              // User account created successfully
+              this.inputData.userId = userCredential.user.uid
+              console.log(userCredential.user.uid);
+
+            })
+            .catch((error) => {
+              // Handle registration error
+              console.error(error);
+            });
+
+
+          await axios.post(`/cmp/api/v1/registration/createUser?regiNum=${this.inputData.userId}`, this.inputData)
+            .then(response => {
+              console.log(response.data.message)
+              if (response.data.message == "Success") {
+                router.push('/')
+              }
+            }).catch(error => {
+              console.error(error);
+
+            });
+          this.loading = false
+
+        }
+
       }
     },
     async getAlYears() {
-      try {
-        // this.loading = true;
-        let data = await ApiService.get('/cmp/api/v1/alyears/getAlYears');
-        this.items = data.years
-        // this.loading = false;
+      await axios.get('/cmp/api/v1/alyears/getAlYears')
+        .then(response => {
+          this.items = response.data.message.years
 
-      } catch (error) {
-        // Handle error
-      }
+        }).catch(error => {
+          console.error(error);
+
+        });
+
     }
   },
   mounted() {
@@ -147,7 +199,7 @@ export default {
     setInterval(() => {
       this.popupVal = !this.popupVal; // Toggle the value of 'test' every second
     }, 1000);
-  }
+  },
 };
 </script>
   
