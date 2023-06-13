@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import LoginView from '@/views/LoginView.vue'
 import SingUpView from '@/views/SingUpView.vue'
+import HomeView from '@/views/HomeView.vue'
 
 Vue.use(VueRouter)
 
@@ -16,6 +17,11 @@ const routes = [
     name: 'SingUpView',
     component: SingUpView
   },
+  {
+    path: '/home',
+    name:'HomeView',
+    component: HomeView
+  }
 ]
 
 const router = new VueRouter({

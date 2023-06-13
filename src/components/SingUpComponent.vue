@@ -83,6 +83,7 @@
             </v-card>
           </v-col>
         </v-row>
+        <AlertMsg v-if="alertEnable" :alertData="alertData" />
       </v-container>
     </v-main>
   </v-app>
@@ -92,10 +93,12 @@
 import axios from '@/services/axiosConfig';
 import firebase from '@/services/firebase';
 import router from '@/router/index'
+import AlertMsg from '@/components/DisplayAlerts.vue'
 
 export default {
   data() {
     return {
+      alertEnable: false,
       loading: false,
       pass: '',
       cpass: '',
@@ -115,8 +118,12 @@ export default {
       emailRules: [v => !!v || "Field is required", v => /.+@.+\..+/.test(v) || 'E-mail must be valid'],
       passwordRules: [v => !!v || "Field is required",
       v => (v && v.length > 5) || "Password length must be longer than 5 characters"],
-      cpasswordRules: [v => !!v || "Field is required", v => (v == this.pass) || 'Password not match']
+      cpasswordRules: [v => !!v || "Field is required", v => (v == this.pass) || 'Password not match'],
+      alertData: {}
     };
+  },
+  components: {
+    AlertMsg
   },
   methods: {
     async ContinueFirstStep() {
@@ -136,46 +143,49 @@ export default {
       }
     },
     async submit() {
+      this.alertEnable = false
       if (this.$refs.form2.validate()) {
         if (this.regiNumber != null) {
-          let email = this.regiNumber + '@gmail.com'
+          let email = this.inputData.email
           let password = this.cpass
           this.inputData.role = 'student'
 
-
-          //   firebase.auth().signInWithEmailAndPassword(email, password)
-          // .then((userCredential) => {
-          //   // User logged in successfully
-          //   console.log(userCredential.user.uid);
-          // })
-          // .catch((error) => {
-          //   // Handle login error
-          //   console.error(error);
-          // });
           this.loading = true
           await firebase.auth().createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
               // User account created successfully
               this.inputData.userId = userCredential.user.uid
               console.log(userCredential.user.uid);
+              axios.post(`/cmp/api/v1/registration/createUser?regiNum=${this.inputData.userId}`, this.inputData)
+                .then(response => {
+                  console.log(response.data.message)
+                  if (response.data.message == "Success") {
+                    this.alertData.name = "Sing Up Successful"
+                    this.alertData.color = 'green'
+                    this.alertEnable = true
+                    router.push('/')
+                  } else {
+                    this.alertData.name = "Sing Up Error"
+                    this.alertData.color = 'red'
+                    this.alertEnable = true
+                  }
+                }).catch(error => {
+                  console.error(error);
+                  this.alertData.name = "Sing Up Error"
+                  this.alertData.color = 'red'
+                  this.alertEnable = true
+
+                });
 
             })
             .catch((error) => {
               // Handle registration error
+              this.alertData.name = "Sing Up Error"
+              this.alertData.color = 'red'
+              this.alertEnable = true
               console.error(error);
             });
 
-
-          await axios.post(`/cmp/api/v1/registration/createUser?regiNum=${this.inputData.userId}`, this.inputData)
-            .then(response => {
-              console.log(response.data.message)
-              if (response.data.message == "Success") {
-                router.push('/')
-              }
-            }).catch(error => {
-              console.error(error);
-
-            });
           this.loading = false
 
         }
