@@ -60,7 +60,7 @@ export default {
                   // User logged in successfully
                   if(userCredential.user.uid == this.userData.userId){
                     sessionStorage.clear();
-                    sessionStorage.setItem('key', JSON.stringify(this.userData));
+                    sessionStorage.setItem('userData', JSON.stringify(this.userData));
                     this.alertEnable = true
                     this.alertData.name = "Login Successful"
                     this.alertData.color = 'green'
