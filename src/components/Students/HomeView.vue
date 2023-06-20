@@ -35,7 +35,7 @@
                         style="border: 4px solid #24d483; border-radius: 13px" class="ma-2" :height="active ? 450 : 400"
                         :width="active ? 350 : 350" @click="
                           toggle();
-                        callSelectedRoute(img.survey, img.id);
+                        callSelectedRoute(img.id);
                         clicked = true;
                         ">
 
@@ -64,7 +64,7 @@
             </v-item-group>
           </v-col>
           <v-col v-if="$vuetify.breakpoint.xs">
-            <v-btn class="white--text" color="orange lighten-2" :to="directRouterPath"> Continue </v-btn>
+            <v-btn class="white--text" color="orange lighten-2" @click="continueBtn"> Continue </v-btn>
           </v-col>
         </v-row>
         <v-row>
@@ -78,7 +78,7 @@
         </p>
       </v-col> -->
           <v-col v-if="$vuetify.breakpoint.sm || $vuetify.breakpoint.md || $vuetify.breakpoint.lg || $vuetify.breakpoint.xl">
-            <v-btn class="white--text" color="orange lighten-2" :to="directRouterPath"> Continue </v-btn>
+            <v-btn class="white--text" color="orange lighten-2" @click="continueBtn"> Continue </v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -86,75 +86,62 @@
   </v-app>
 </template>
 <script>
+import router from '@/router/index'
 export default {
   data() {
     return {
-
-      username: this.$route.params.username,
       clicked: false,
-      model: 1,
+      model: -1,
       image: [
         {
           id: 0,
-          src: require("@/assets/fiverr.jpg"),
+          src: "https://firebasestorage.googleapis.com/v0/b/cmp--academy.appspot.com/o/Teachers%2Ffiverr.jpg?alt=media&token=5a04723b-cb4a-4fd4-9498-9af22448771d",
           title: "Chemistry",
           name: "Akila Gunasekara",
-          survey: "/individualOptionsSurvey",
-          discrip: "This category includes National Guide, Chauffer Guide, Area Guide, Site Guide, Tourist Driver, Tourist Car, Tourist Van, Tourist Bus, Bus Assistant and Safari Jeep",
-        },
-        {
-          id: 1,
-          src: require("@/assets/fiverr.jpg"),
-          title: "Combined Maths",
-          name: "Jeewantha Senanayake",
-          survey: "/accommodationServiceSurvey",
-          discrip: "This category includes Boutique Hotel, Bungalow, Rented Home, Heritage Home, Heritage Bungalow, Guest House, Boutique Villa, 1 or 2 star hotel, 3 star, 4 star, 5 star, Eco Lodge, Boutique Hotel, Heritage Hotel, Apartment Hotel, Camping Site, Tourist Hostal, Food Court, Tourist Hotel, Tourist Friendly Eating Places, Travel Agency, DESTINATION EVENT MANAGEMENT COMPANIES (DEMC), SPA and Wellness Center, Water Sport Center, Tourist Shop, Rented Apartment, Hostal Accommodation, Tourist Hotel, Home Stay Unit, Tourist Restaurant, Spice Gardens and Themed Accommodation and value added Activities",
         },
         {
           id: 2,
-          src: require("@/assets/fiverr.jpg"),
+          src: "https://firebasestorage.googleapis.com/v0/b/cmp--academy.appspot.com/o/Teachers%2Ffiverr.jpg?alt=media&token=5a04723b-cb4a-4fd4-9498-9af22448771d",
           title: "Physics",
           name: "Ishan Karunarathna",
-          survey: "/otherServiceOptionSurvey",
-          discrip: "This category includes Sky Diving, Para Moter, Paragliding, Hot Air Balonning, Water Skiing/ Wake Boarding, Rafting/ White Water Rafting, Kite Surfing/ Wind Surfing, Snorkeling & Scuba Diving, Sport Fishing, Sailing, Rowing, Leisure Boat & Small Vessel Operation, Kite Surfing/ Wind Surfing, Jet Skiing, Houseboats, Whale & Dolphin Watching and Canoeing & Kayaking, Dragon Boating",
+        },
+        {
+          id: 1,
+          src: "https://firebasestorage.googleapis.com/v0/b/cmp--academy.appspot.com/o/Teachers%2Ffiverr.jpg?alt=media&token=5a04723b-cb4a-4fd4-9498-9af22448771d",
+          title: "Combined Maths",
+          name: "Jeewantha Senanayake",
         },
       ],
-      directRouterPath: "/accommodationServiceSurvey",
-      // /otherServiceOptionSurvey
-      discription: "",
 
     };
   },
   methods: {
-    callSelectedRoute(data, id) {
-      this.directRouterPath = data
-      sessionStorage.setItem("welcom_id", id);
-
+    continueBtn(){
+      let id = this.image[this.model].id
+      sessionStorage.setItem('sub_id', id)
+      router.push('/dashboard')
     },
     startTimer() {
       // Update the timer every second (1000 milliseconds)
       this.timerInterval = setInterval(() => {
         this.timer++;
-      }, 1000);
-    },
-    stopTimer() {
-      // Stop the timer
-      clearInterval(this.timerInterval);
+        this.model++;
+        if(this.model>1){
+          clearInterval(this.timerInterval)
+        }
+      }, 750);
     },
 
   },
   created() {
-    // if (sessionStorage.getItem("welcom_id") != null) {
-    //   this.model = sessionStorage.getItem("welcom_id")
-    // } else {
-    //   this.model = 1
-    // }
-
+    //not login auto redirect loging page
+    let userData = sessionStorage.getItem('userData')
+    if(userData == null){
+      router.push('/')
+    }
   },
   mounted() {
-    // Start the timer when the component is mounted
-    // this.startTimer();
-    
+    this.startTimer()
   },
 };
 </script>

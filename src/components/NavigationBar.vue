@@ -2,18 +2,32 @@
     <v-card flat>
         <v-app-bar :dark="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs ? true : false" :color="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs
             ? 'black'
-            : userType === 'subject_officer'
-                ? 'white'
+            : userType === 'student'
+                ? 'black'
                 : 'black'
             " height="70px" :flat="true" class="">
             <v-row align="center" style="justify-content: space-between">
+
                 <v-col lg="10" md="4" sm="2" cols="6">
-                    <div class="app-bar-title text-left ml-5" v-if="!$vuetify.breakpoint.sm && !$vuetify.breakpoint.xs">
+                    <div class="app-bar-title white--text text-left ml-5"
+                        v-if="!$vuetify.breakpoint.sm && !$vuetify.breakpoint.xs">
+                        {{ title }}
+                    </div>
+                    <v-row v-if="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs">
+                        <v-app-bar-nav-icon large @click.stop="drawer = !drawer"
+                            class="d-flex d-md-none"></v-app-bar-nav-icon>
+                        
+                           <h3 class="mt-2 ml-3"> {{ title }}</h3>
+                        
+                    </v-row>
+
+
+                </v-col>
+                <!-- <v-col class="d-flex justify-start" v-if="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs">
+                    <div class="white--text" >
                         Dashboard
                     </div>
-                    <v-app-bar-nav-icon large @click.stop="drawer = !drawer" class="d-flex d-md-none"></v-app-bar-nav-icon>
-                </v-col>
-
+                </v-col> -->
                 <v-col lg="1" md="1" sm="1" cols="2" class="" style="border: 0px solid white">
                     <v-menu left bottom rounded="rounded">
                         <template v-slot:activator="{ on, attrs }">
@@ -46,12 +60,13 @@
             <v-list nav dark>
                 <div v-for="item in userType === 'student'
                     ? studentItems
-                    : studentItems" :key="item.title">
+                    : teacherItems" :key="item.title">
 
                     <v-list-item class="mb-5" :to="item.to">
 
-                        <v-list-item-title class="text-left side-nav-font "> <v-icon class="mr-2">{{ item.icon }}</v-icon> {{
-                            item.title }}
+                        <v-list-item-title class="text-left side-nav-font "> <v-icon class="mr-2">{{ item.icon }}</v-icon>
+                            {{
+                                item.title }}
                         </v-list-item-title>
 
                     </v-list-item>
@@ -65,12 +80,12 @@
 
 const student_menu = [
     {
-        title: "Profile",
+        title: "Dashboard",
         icon: "mdi-view-dashboard",
-        to: "/home"
+        to: "/dashboard"
     },
     {
-        title: "Class",
+        title: "Profile",
         icon: "mdi-account-outline",
         to: "/account"
     },
@@ -89,8 +104,25 @@ const student_menu = [
         icon: "mdi-bell-badge-outline",
         to: "/notifications"
     }
-    
+
 ];
+
+const teacher_menu = [
+    {
+        title: "Dashboard",
+        icon: "mdi-view-dashboard",
+        to: "/dashboard"
+    },
+    {
+        title: "Profile",
+        icon: "mdi-account-outline",
+        to: "/account"
+    },
+    
+
+];
+
+
 
 
 export default {
@@ -110,6 +142,7 @@ export default {
         drawer: false,
 
         studentItems: student_menu,
+        teacherItems:teacher_menu,
         menus: [
             { title: "Profile", icon: "mdi-account", action: "profile" },
             { title: "Inquiries", icon: "mdi-information-outline", action: "inquiries" },

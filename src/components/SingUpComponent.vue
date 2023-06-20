@@ -204,7 +204,7 @@ export default {
 
     }
   },
-  mounted() {
+  created() {
     this.getAlYears();
     setInterval(() => {
       this.popupVal = !this.popupVal; // Toggle the value of 'test' every second

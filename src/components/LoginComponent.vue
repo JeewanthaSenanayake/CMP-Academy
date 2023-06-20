@@ -36,6 +36,7 @@ import AlertMsg from '@/components/DisplayAlerts.vue'
 export default {
   data() {
     return {
+      valid:false,
       disableBtn : false,
       alertEnable:false,
       inputData: {},
