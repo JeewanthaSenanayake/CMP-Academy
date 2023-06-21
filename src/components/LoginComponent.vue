@@ -65,7 +65,12 @@ export default {
                     this.alertEnable = true
                     this.alertData.name = "Login Successful"
                     this.alertData.color = 'green'
-                    router.push('/home')
+                    if(this.userData.role=="student"){
+                      router.push('/home')
+                    }else if(this.userData.role=="teacher"){
+                      router.push('/teacher-dashboard')
+                    }
+                    
                   }else{
                     this.alertEnable = true
                     this.alertData.name = "Username or Password Incorrect"

@@ -4,6 +4,7 @@ import LoginView from '@/views/LoginView.vue'
 import SingUpView from '@/views/SingUpView.vue'
 import HomeView from '@/views/Students/HomeView.vue'
 import DashboardView from '@/views/Students/DashboardView.vue'
+import TeacherDashboardView from '@/views/Teacher/DashboardViwe.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,11 @@ const routes = [
     path: '/dashboard',
     name:'Dashboard',
     component : DashboardView
+  },
+  {
+    path: '/teacher-dashboard',
+    name:'Dashboard',
+    component : TeacherDashboardView
   }
 ]
 

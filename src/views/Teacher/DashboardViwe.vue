@@ -9,7 +9,7 @@
 
 <script>
 import Navigation from '@/components/NavigationBar.vue';
-import Dashboard from '@/components/Students/DashboardComp.vue';
+import Dashboard from '@/components/Teacher/DashboardComp.vue';
 import router from '@/router/index'
 export default {
     data() {
@@ -25,7 +25,7 @@ export default {
        
         //not login auto redirect loging page
         let userData = sessionStorage.getItem('userData')
-        if (JSON.parse(userData).role != "student") {
+        if (userData == null) {
             router.push('/')
         }else{
             this.singed_user = JSON.parse(userData)

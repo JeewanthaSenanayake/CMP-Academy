@@ -58,7 +58,7 @@
                 <v-img max-width="95%" class="mb-5" :src="require('@/assets/cmp.png')" />
             </center>
             <v-list nav dark>
-                <div v-for="item in userType === 'student'
+                <div v-for="item in userType == 'student'
                     ? studentItems
                     : teacherItems" :key="item.title">
 
@@ -111,10 +111,10 @@ const teacher_menu = [
     {
         title: "Dashboard",
         icon: "mdi-view-dashboard",
-        to: "/dashboard"
+        to: "/teacher-dashboard"
     },
     {
-        title: "Profile",
+        title: "Class",
         icon: "mdi-account-outline",
         to: "/account"
     },
