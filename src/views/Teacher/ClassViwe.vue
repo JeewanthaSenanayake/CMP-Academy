@@ -1,15 +1,15 @@
 <template>
     <v-app>
         <v-main>
-            <Navigation :userType="singed_user.role" :title="'Dashboard'" />
-            <Dashboard />
+            <Navigation :userType="singed_user.role" :title="'Create Class'" />
+            <Class />
         </v-main>
     </v-app>
 </template>
 
 <script>
 import Navigation from '@/components/NavigationBar.vue';
-import Dashboard from '@/components/Teacher/DashboardComp.vue';
+import Class from '@/components/Teacher/ClassComp.vue';
 import router from '@/router/index'
 export default {
     data() {
@@ -19,7 +19,7 @@ export default {
     },
     components: {
         Navigation,
-        Dashboard
+        Class
     },
     created() {
 

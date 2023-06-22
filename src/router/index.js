@@ -5,6 +5,7 @@ import SingUpView from '@/views/SingUpView.vue'
 import HomeView from '@/views/Students/HomeView.vue'
 import DashboardView from '@/views/Students/DashboardView.vue'
 import TeacherDashboardView from '@/views/Teacher/DashboardViwe.vue'
+import ClassView from '@/views/Teacher/ClassViwe.vue'
 
 Vue.use(VueRouter)
 
@@ -33,6 +34,11 @@ const routes = [
     path: '/teacher-dashboard',
     name:'Dashboard',
     component : TeacherDashboardView
+  },
+  {
+    path: '/teacher-class',
+    name:'Class',
+    component : ClassView
   }
 ]
 

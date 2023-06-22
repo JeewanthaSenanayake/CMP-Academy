@@ -1,6 +1,5 @@
 <template>
   <v-app>
-
     <v-container fluid >
       <v-row>
 
