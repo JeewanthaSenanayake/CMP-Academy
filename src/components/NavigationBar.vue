@@ -114,7 +114,7 @@ const teacher_menu = [
         to: "/teacher-dashboard"
     },
     {
-        title: "Create Class",
+        title: "Classes Data",
         icon: "mdi-account-outline",
         to: "/teacher-class"
     },
