@@ -9,8 +9,8 @@
             <v-card-subtitle class="text-left">{{ data.subTopic }}</v-card-subtitle>
             <v-card-text>
               <div class="text-left">
-              <v-btn v-if="data.isFree==1" :class="!$vuetify.breakpoint.xs?'ml-2 mb-2 white--text':'mb-2 white--text'" color="green " small @click="openZoomLink(data.zoom)">Join class</v-btn>
-              <v-btn v-else :disabled="data.paymentDone==1" :class="!$vuetify.breakpoint.xs?'ml-2 mb-2 white--text':'mb-2 white--text'" :color="data.paymentDone==0?'orange lighten-1':data.paymentDone==1?'orange lighten-1':'green'" small @click="openZoomLink(data.zoom)">{{ data.paymentDone==0?"enroll class":data.paymentDone==1?"pending":"Join class" }}</v-btn>
+              <v-btn v-if="data.isFree==1" :class="!$vuetify.breakpoint.xs?'ml-2 mb-2 white--text':'mb-2 white--text'" color="blue " small @click="openZoomLink(data.zoom)">Join class</v-btn>
+              <v-btn v-else :disabled="data.paymentDone==1 || data.paymentDone==0" :class="!$vuetify.breakpoint.xs?'ml-2 mb-2 white--text':'mb-2 white--text'" :color="data.paymentDone==0?'orange lighten-1':data.paymentDone==1?'orange lighten-1':'blue'" small @click="openZoomLink(data.zoom)">{{ data.paymentDone==0?"enroll class":data.paymentDone==1?"pending":"Join class" }}</v-btn>
             </div>
               <div v-if="data.tutes.length > 0" class="text-left">
                 <v-row v-for="(tutesData,m) in data.tutes" :key="m" :class="!$vuetify.breakpoint.xs?'blue lighten-5 my-1 mx-2':'white my-1 mr-3' ">
@@ -19,7 +19,12 @@
                     {{ tutesData.name }}</h4>
                   </v-col>
                   <v-col cols="1" md="2" sm="2" class="text-right">
-                     <v-btn :disabled="(data.paymentDone==0 || data.paymentDone==1)&& data.isFree !=1" class="" x-small color="primary" @click="downloadPDF(tutesData.link)">Download</v-btn>
+                     <v-btn :disabled="(data.paymentDone==0 || data.paymentDone==1)&& data.isFree !=1" class="white--text" x-small color="green" @click="downloadPDF(tutesData.link)">Download <v-icon
+        right
+        dark
+      >
+      mdi-download
+      </v-icon> </v-btn>
                   </v-col>
                 </v-row>
               </div>

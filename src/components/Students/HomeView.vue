@@ -95,19 +95,19 @@ export default {
       image: [
         {
           id: 0,
-          src: "https://firebasestorage.googleapis.com/v0/b/cmp--academy.appspot.com/o/Teachers%2Ffiverr.jpg?alt=media&token=5a04723b-cb4a-4fd4-9498-9af22448771d",
+          src: "https://firebasestorage.googleapis.com/v0/b/cmp--academy.appspot.com/o/fiverr.jpg?alt=media&token=f1a6e333-dd26-4d14-b4ce-13981698d163",
           title: "Chemistry",
           name: "Akila Gunasekara",
         },
         {
           id: 2,
-          src: "https://firebasestorage.googleapis.com/v0/b/cmp--academy.appspot.com/o/Teachers%2Ffiverr.jpg?alt=media&token=5a04723b-cb4a-4fd4-9498-9af22448771d",
+          src: "https://firebasestorage.googleapis.com/v0/b/cmp--academy.appspot.com/o/fiverr.jpg?alt=media&token=f1a6e333-dd26-4d14-b4ce-13981698d163",
           title: "Physics",
           name: "Ishan Karunarathna",
         },
         {
           id: 1,
-          src: "https://firebasestorage.googleapis.com/v0/b/cmp--academy.appspot.com/o/Teachers%2Ffiverr.jpg?alt=media&token=5a04723b-cb4a-4fd4-9498-9af22448771d",
+          src: "https://firebasestorage.googleapis.com/v0/b/cmp--academy.appspot.com/o/fiverr.jpg?alt=media&token=f1a6e333-dd26-4d14-b4ce-13981698d163",
           title: "Combined Maths",
           name: "Jeewantha Senanayake",
         },

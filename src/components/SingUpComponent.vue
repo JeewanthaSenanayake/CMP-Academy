@@ -69,11 +69,8 @@
                       </v-btn>
 
                       <v-btn class="mb-3 ml-2 blue white--text" width="100" style="text-transform: none;"
-                        @click="loader = 'loading'; submit();" :loading="loading" :disabled="loading">
+                        @click="submit();" :loading="loading">
                         Submit
-                        <template v-slot:loader>
-                          <span>Loading...</span>
-                        </template>
                       </v-btn>
 
                     </v-card-actions>

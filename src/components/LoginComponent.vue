@@ -14,7 +14,7 @@
                     :rules="[v => !!v || 'Password is required']" required></v-text-field>
 
                 </v-form>
-                <v-btn :disabled="disableBtn" type="submit" color="primary" block @click="login();">Login</v-btn>
+                <v-btn  :loading="disableBtn" type="submit" color="primary" block @click="login();">Login</v-btn>
               </v-card-text>
               <p class="py-3">Does not have an account?<v-btn style="text-transform: none;" text to="/sing-up"
                   class="indigo--text"><b>Sign Up</b></v-btn></p>

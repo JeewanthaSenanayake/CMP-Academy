@@ -16,7 +16,7 @@
                                             outlined></v-text-field>
                                         <v-select :items="items" v-model="data.yerOfAl" label="Year of A/L"
                                             :rules="nameRules" outlined></v-select>
-                                        <v-btn :disabled="loading" class="green white--text ml-2 " @click="createClass">Create</v-btn>
+                                        <v-btn :loading="loading" class="green white--text ml-2 " @click="createClass">Create</v-btn>
                                     </v-row>
                                 </v-form>
                             </v-card-text>
