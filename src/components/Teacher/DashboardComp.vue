@@ -14,9 +14,17 @@
                                     <v-row class="pa-2">
                                         <v-text-field v-model="data.className" :rules="nameRules" label="Class Name"
                                             outlined></v-text-field>
+
+
                                         <v-select :items="items" v-model="data.yerOfAl" label="Year of A/L"
                                             :rules="nameRules" outlined></v-select>
-                                        <v-btn :loading="loading" class="green white--text ml-2 " @click="createClass">Create</v-btn>
+                                        <v-text-field :class="!$vuetify.breakpoint.xs?'mr-2':'mr-0'" v-model="data.classDay" :rules="nameRules" label="Class Days"
+                                            outlined></v-text-field>
+
+                                        <v-text-field v-model="data.fee" :rules="nameRules" label="Class Fee"
+                                            outlined></v-text-field>
+                                        <v-btn :loading="loading" class="green white--text ml-2 "
+                                            @click="createClass">Create</v-btn>
                                     </v-row>
                                 </v-form>
                             </v-card-text>

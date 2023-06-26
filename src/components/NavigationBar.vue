@@ -85,6 +85,11 @@ const student_menu = [
         to: "/dashboard"
     },
     {
+        title:"Classes",
+        icon:"mdi-view-dashboard",
+        to:"/class"
+    },
+    {
         title: "Profile",
         icon: "mdi-account-outline",
         to: "/account"

@@ -50,7 +50,6 @@
                     </v-col>
                 </v-row>
             </v-form>
-            {{ data }}
             <AlertMsg v-if="alertEnable" :alertData="alertData" />
         </v-container>
     </v-app>
@@ -75,7 +74,8 @@ export default {
             loading: false,
             data: {
                 "subject": (JSON.parse(sessionStorage.getItem('userData'))).subject,
-                "tutes": []
+                "tutes": [],
+                
             },
             className: [],
             selectedFiles: [],
@@ -96,6 +96,8 @@ export default {
                 for (const iterator of this.items) {
                     if (iterator.className == this.data.className) {
                         selectedClassId = iterator.id
+                        this.data.fee=iterator.fee
+                        this.data.classDay=iterator.day
                         break
                     }
                 }
@@ -134,7 +136,6 @@ export default {
             }
         },
         async uploadFile() {
-
             this.alertEnable = false;
             this.loading1 = true
             const storage = firebase.storage();

@@ -118,7 +118,14 @@ export default {
   methods: {
     continueBtn(){
       let id = this.image[this.model].id
-      sessionStorage.setItem('sub_id', id)
+      if(id == 0){
+        sessionStorage.setItem('sub_id', "chemistry")
+      }else if(id==1){
+        sessionStorage.setItem('sub_id', "maths")
+      }else if(id==2){
+        sessionStorage.setItem('sub_id', "physics")
+      }
+      
       router.push('/dashboard')
     },
     startTimer() {
