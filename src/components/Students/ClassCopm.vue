@@ -34,18 +34,16 @@
                 </v-col>
             </v-row>
         </v-container>
-        <AlertMsg v-if="alertEnable" :alertData="alertData" />
-
+        <v-snackbar v-model="massage.chip" :color="massage.color" top rounded="pill">
+            <div class="text-center">{{ massage.text }}</div>
+        </v-snackbar>
     </v-app>
 </template>
   
 <script>
 import axios from '@/services/axiosConfig';
-import AlertMsg from '@/components/DisplayAlerts.vue'
 export default {
-    components: {
-        AlertMsg
-    },
+
     data() {
         return {
             isPaymentDone: 0,   //0- not paid, 1-paid not accepted, 2-paid accepted, 3-rejected
@@ -53,6 +51,11 @@ export default {
             userData: JSON.parse(sessionStorage.getItem('userData')),
             alertData: {},
             alertEnable: false,
+            massage: {
+                chip: false,
+                text: '',
+                color: ''
+            }
         }
     },
     methods: {
@@ -60,20 +63,22 @@ export default {
             await axios.put(`/cmp/api/v1/class/registerForClass?classType=${sessionStorage.getItem('sub_id')}&classId=${id}&studentId=${this.userData.userId}`)
                 .then(async response => {
                     if (response.data.message == "Success") {
-                       await this.getAlclass();
-                        this.alertData.name = "Registration Successful"
-                        this.alertData.color = 'green'
-                        this.alertEnable = true;
+                        await this.getAlclass();
+                        this.massage.chip = true;
+                        this.massage.text = 'Registration Successful';
+                        this.massage.color = 'success';
+
                     } else {
-                        this.alertData.name = "Registration Faild"
-                        this.alertData.color = 'red'
-                        this.alertEnable = true;
+
+                        this.massage.chip = true;
+                        this.massage.text = 'Registration Faild';
+                        this.massage.color = 'error';
                     }
                 }).catch(error => {
                     console.error(error);
-                    this.alertData.name = "Registration Faild"
-                        this.alertData.color = 'red'
-                        this.alertEnable = true;
+                    this.massage.chip = true;
+                    this.massage.text = 'Registration Faild';
+                    this.massage.color = 'error';
                 });
         },
         isRegisted(registrationList) {
@@ -87,7 +92,7 @@ export default {
         async getAlclass() {
             await axios.get(`/cmp/api/v1/class/getAllClass?classType=${sessionStorage.getItem('sub_id')}`)
                 .then(response => {
-                    this.items=[]
+                    this.items = []
                     for (const iterator of response.data.message) {
                         if (iterator.yerOfAl == this.userData.yerOfAl) {
                             this.items.push(iterator)
