@@ -31,7 +31,7 @@
                       {{ tutesData.name }}</h4>
                   </v-col>
                   <v-col cols="1" md="2" sm="2" class="text-right">
-                    <v-btn :disabled="(data.paymentDone == 0) && data.isFree == 0" class="white--text" x-small color="green"
+                    <v-btn :disabled="(data.paymentDone != 2) && data.isFree == 0" class="white--text" x-small color="green"
                       @click="downloadPDF(tutesData.link)">Download <v-icon right dark>
                         mdi-download
                       </v-icon> </v-btn>
