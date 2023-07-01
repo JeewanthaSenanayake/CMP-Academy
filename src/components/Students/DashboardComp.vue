@@ -11,10 +11,17 @@
               <div class="text-left">
                 <v-btn v-if="data.isFree == 1" :class="!$vuetify.breakpoint.xs ? 'ml-2 mb-2 white--text' : 'mb-2 white--text'"
                   color="blue " small @click="openZoomLink(data.zoom)">Join class</v-btn>
-                <v-btn v-else :disabled="data.paymentDone == 0"
+                <v-chip v-else-if="data.paymentDone == 0" class="ma-2" color="red" outlined pill>
+                  Please pay the class fees</v-chip>
+                  <v-chip v-else-if="data.paymentDone == 1" class="ma-2" color="orange" outlined pill>
+                    Pending for review
+                  </v-chip>
+                  <v-chip v-else-if="data.paymentDone == 3" class="ma-2" color="error" outlined pill>
+                    Class fees payment rejected. Please contact admin
+                  </v-chip>
+                <v-btn v-else
                   :class="!$vuetify.breakpoint.xs ? 'ml-2 mb-2 white--text' : 'mb-2 white--text'"
-                  :color="data.paymentDone == 0 ? 'orange lighten-1' : 'blue'" small @click="openZoomLink(data.zoom)">{{
-                    data.paymentDone == 0 ? "Please pay the class fees" : "Join class" }}</v-btn>
+                  color="blue" small @click="openZoomLink(data.zoom)">Join class</v-btn>
               </div>
               <div v-if="data.tutes.length > 0" class="text-left">
                 <v-row v-for="(tutesData, m) in data.tutes" :key="m"

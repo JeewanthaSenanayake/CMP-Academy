@@ -2,7 +2,6 @@
     <v-app>
         <v-container fluid>
             <v-row>
-
                 <v-col>
                     <v-card v-for="(data, n) in items" :key="n" class="my-8" elevation="10">
                         <v-card-title>{{ data.className }}</v-card-title>
@@ -11,21 +10,21 @@
                             <p class="text-left">Class Fee : Rs.{{ data.fee }}</p>
                             <p class="text-left">Class time : {{ data.classDay }}</p>
                             <div class="text-left">
-                                <v-btn v-if="isRegisted(data.regiStudents) != true"
+                                <v-btn v-if="data.isRegistered != true"
                                     :class="!$vuetify.breakpoint.xs ? 'ml-2 mb-2 white--text' : 'mb-2 white--text'"
                                     color="orange " small @click="registerToClass(data.id)">Register the class</v-btn>
-                                <v-btn v-else-if="isPaymentDone == 0"
+                                <v-btn v-else-if="data.isPaymentDone == 0"
                                     :class="!$vuetify.breakpoint.xs ? 'ml-2 mb-2 white--text' : 'mb-2 white--text'"
-                                    color="blue" small @click="openZoomLink(data.zoom)">Rs.{{ data.fee }} Pay</v-btn>
+                                    color="blue" small @click="pay(data.zoom)">Rs.{{ data.fee }} Pay</v-btn>
 
-                                <v-chip v-else-if="isPaymentDone == 1" class="ma-2" color="primary" outlined pill>
-                                    Payment prograss
+                                <v-chip v-else-if="data.isPaymentDone == 1" class="ma-2" color="orange" outlined pill>
+                                    Pending for review
                                 </v-chip>
-                                <v-chip v-else-if="isPaymentDone == 2" class="ma-2" color="success" outlined pill>
+                                <v-chip v-else-if="data.isPaymentDone == 2" class="ma-2" color="success" outlined pill>
                                     You successfully registered for this mounth
                                 </v-chip>
-                                <v-chip v-else-if="isPaymentDone == 3" class="ma-2" color="error" outlined pill>
-                                    Payment rejected. Please contact admin
+                                <v-chip v-else-if="data.isPaymentDone == 3" class="ma-2" color="error" outlined pill>
+                                    Class fees payment rejected. Please contact admin
                                 </v-chip>
                             </div>
                         </v-card-text>
@@ -46,7 +45,7 @@ export default {
 
     data() {
         return {
-            isPaymentDone: 0,   //0- not paid, 1-paid not accepted, 2-paid accepted, 3-rejected
+            // isPaymentDone: 0,   //0- not paid, 1-paid not accepted, 2-paid accepted, 3-rejected
             items: [],
             userData: JSON.parse(sessionStorage.getItem('userData')),
             alertData: {},
@@ -81,16 +80,9 @@ export default {
                     this.massage.color = 'error';
                 });
         },
-        isRegisted(registrationList) {
-            for (const iterator of registrationList) {
-                if (iterator == this.userData.userId) {
-                    return true
-                }
-            }
-        },
 
         async getAlclass() {
-            await axios.get(`/cmp/api/v1/class/getAllClass?classType=${sessionStorage.getItem('sub_id')}`)
+            await axios.get(`/cmp/api/v1/class/getAllClassWithPaymentStatus?classType=${sessionStorage.getItem('sub_id')}&studentId=${this.userData.userId}`)
                 .then(response => {
                     this.items = []
                     for (const iterator of response.data.message) {
