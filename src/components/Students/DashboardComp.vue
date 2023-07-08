@@ -2,7 +2,6 @@
   <v-app>
     <v-container fluid>
       <v-row>
-
         <v-col>
           <v-card v-for="(data, n) in classData" :key="n" class="my-8" elevation="10">
             <v-card-title>{{ data.className }}</v-card-title>
