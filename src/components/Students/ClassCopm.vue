@@ -18,7 +18,7 @@
                                 </v-chip>
                                 <v-btn v-else-if="data.isPaymentDone == 0"
                                     :class="!$vuetify.breakpoint.xs ? 'ml-2 mb-2 white--text' : 'mb-2 white--text'"
-                                    color="blue" small @click="dialog = true; classId = data.id">Rs.{{ data.fee }}
+                                    color="blue" small @click="dialog = true; classId = data.id; amount=data.fee">Rs.{{ data.fee }}
                                     Pay</v-btn>
 
                                 <v-chip v-else-if="data.isPaymentDone == 1" class="ma-2" color="orange" outlined pill>
@@ -44,8 +44,9 @@
                     <v-card-text>
                         <v-form ref="form2" v-model="valid2">
 
-                            <v-file-input v-model="selectedFiles" :disabled="uploadSuccessfull" label="Upload Payment Slip"
-                                :rules="fileRules" small-chips counter show-size truncate-length="12" accept="image/*,.pdf"></v-file-input>
+                            <v-file-input v-model="selectedFiles"  label="Upload Payment Slip"
+                                :rules="fileRules" small-chips counter show-size truncate-length="12"
+                                accept="image/*,.pdf"></v-file-input>
 
                             <v-row>
 
@@ -79,7 +80,6 @@
 
                 </v-card>
             </v-dialog>
-            {{ slipData }}
         </v-container>
         <v-snackbar v-model="massage.chip" :color="massage.color" top rounded="pill">
             <div class="text-center">{{ massage.text }}</div>
@@ -112,7 +112,9 @@ export default {
             modal: false,
             slipData: {},
             classId: null,
-            loading1: false
+            loading1: false,
+            valid2:false,
+            amount:0
         }
     },
     methods: {
@@ -136,18 +138,40 @@ export default {
                                 this.slipData = {
                                     "name": file.name,
                                     "uid": this.userData.userId,
-                                    "mounth": this.date,
+                                    "month": this.date,
                                     "link": url,
                                     "type": sessionStorage.getItem('sub_id'),
-                                    "id": this.classId
+                                    "id": this.classId,
+                                    "status": 1,
+                                    "amount": this.amount
                                 };
+                                axios.put(`/cmp/api/v1/payment/uploadSilp?type=${sessionStorage.getItem('sub_id')}`, this.slipData)
+                                    .then(async response => {
+                                        if ((response.data.message == "Success")) {
+                                            await this.getAlclass();
+                                            this.massage.chip = true;
+                                            this.massage.text = 'Slip Upload Successful';
+                                            this.massage.color = 'success';
+                                            this.loading1 = false;
+                                            this.dialog = false
+                                        } else {
+                                            this.massage.chip = true;
+                                            this.massage.text = 'Slip Upload Failed';
+                                            this.massage.color = 'error';
+                                            this.loading1 = false;
+                                            this.dialog = false
+                                        }
+                                    })
+                                    .catch(error => {
+                                        this.massage.chip = true;
+                                        this.massage.text = 'Slip Upload Failed';
+                                        this.massage.color = 'error';
+                                        this.loading1 = false;
+                                        this.dialog = false
+                                        console.error('Error getting download URL:', error);
+                                    })
 
 
-                                this.massage.chip = true;
-                                this.massage.text = 'Slip Upload Successful';
-                                this.massage.color = 'success';
-                                this.loading1 = false;
-                                this.dialog = false
                             })
                             .catch(error => {
                                 this.massage.chip = true;
